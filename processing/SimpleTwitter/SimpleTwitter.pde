@@ -10,46 +10,77 @@ final String ACCESS_TOKEN = "";
 final String ACCESS_TOKEN_SECRET = "";
 
 SimpleTwitterLib twitter = null;
-final int UPDATE_SEC = 60;
-int last_update = -1;
-int textLine = 60;
+
+//Incremento para el eje Y
+final int gravedad=1;
+//Clave para saver si ya hemos "gastado" todos los Tweets consultados
 int act_tweet = 0;
 
+//Clase para almacenar la posicion del Tweet
+class Posicion{
+  public int x, y;
+  public Posicion(int x, int y){
+    this.x = x;
+    this.y = y;
+  }
+}
+
+//Listado interno de Tweets/Posicion
+HashMap<String, Posicion> tuit = new HashMap<String, Posicion>();
+//Espacio de linea
+final int X_WIN=400, Y_WIN=400, WORD_H=10;
+//Esta posicion es el tope de la pila
+Posicion inferior = new Posicion(0,Y_WIN);
+
 void setup() {
-  size(400, 400);
-  textFont(createFont("SanSerif", 16));
+  //Creamos la ventana
+  size(X_WIN, Y_WIN);
   twitter = new SimpleTwitterLib(CONSUMER_KEY, CONSUMER_SECRET);
   twitter.auth(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
-  background(0);
+  //Hacemos la primera busqueda para no hacer esperas luego
+  twitter.update("\"i wish\"");
 }
 
-void write_line(){
-  final ArrayList<String> twees = twitter.get_tweets();
-  if(twees.size() <= act_tweet) return;
-  final String s = twees.get(act_tweet);
-  text(s, 15, textLine);
-  textLine += 35;
+void draw(){ 
+  background(0);
+  fill(255);
+
+  //Si no hay Tweets que mostrar no modificamos nada
+  if(tuit.size()<=0) return;
+
+  /*
+   * Equivale a:
+   * String claves[] = tuit.keySet();
+   * for(int i=0;i<claves.length; i++){
+   *   String twee = clave[i];
+   * }
+   */
+  for(String twee : tuit.keySet()){
+    //Cogemos la posicion actual del tuit
+    Posicion p = tuit.get(twee);
+    if(p.y < inferior.y)
+      p.y += gravedad;
+    else if(p.y >= inferior.y)
+      inferior.y = p.y-WORD_H;
+    //Mostramos el texto en su posicion
+    text(twee, p.x, p.y);
+  }
+}
+
+void mousePressed()
+{
+  //Cogemos la lista de Tweets
+  ArrayList<String> twees = twitter.get_tweets();
+  //Si ya estamos en el ultimo Tweet, cargamos la nueva lista
+  if(twees.size() <= act_tweet){
+    twitter.update("\"i wish\"");
+    twees = twitter.get_tweets();
+    act_tweet = 0;
+  }
+  //Insertamos el nuevo Tweet con su posicion inicial
+  String nuevo_tuit = twees.get(act_tweet);
+  tuit.put( nuevo_tuit , new Posicion(180, 0) );
+  //Incrementamos la posicion para leer el proximo
   act_tweet += 1;
 }
-void print_all(){
-  final ArrayList<String> twees = twitter.get_tweets();
-  println("> Lista de deseos:");
-  for(String twee:twees)
-    println(twee);
-  println();
-  println("> Y la lista de sus enlaces:");
-  final ArrayList<String> urls = twitter.get_urls();
-  for(String url:urls)
-    println(url);
-}
 
-void draw() {
-  int actual = millis();
-  if( actual-last_update > UPDATE_SEC*1000 || last_update<0){
-    last_update = actual;
-    act_tweet = 0;
-    twitter.update("\"i wish\"");
-    print_all();
-  }
-  write_line();
-}

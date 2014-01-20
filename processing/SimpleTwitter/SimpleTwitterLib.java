@@ -112,19 +112,23 @@ public class SimpleTwitterLib{
   
   public ArrayList<String> get_tweets(){
     ArrayList<String> ret = new ArrayList<String>();
-    JSONArray statuses = this.last_search.getJSONArray("statuses");
-    for (int i = 0; i < statuses.size(); i++)
-      ret.add( statuses.getJSONObject(i).getString("text") );
+    if(this.last_search != null){
+      JSONArray statuses = this.last_search.getJSONArray("statuses");
+      for (int i = 0; i < statuses.size(); i++)
+        ret.add( statuses.getJSONObject(i).getString("text") );
+    }
     return ret;
   }
   
   public ArrayList<String> get_urls(){
     ArrayList<String> ret = new ArrayList<String>();
-    JSONArray statuses = this.last_search.getJSONArray("statuses");
-    for (int i = 0; i < statuses.size(); i++){
-      JSONArray urls = statuses.getJSONObject(i).getJSONObject("entities").getJSONArray("urls");
-      for (int j = 0; j < urls.size(); j++) {
-        ret.add( urls.getJSONObject(j).getString("expanded_url") );
+    if(this.last_search != null){
+      JSONArray statuses = this.last_search.getJSONArray("statuses");
+      for (int i = 0; i < statuses.size(); i++){
+        JSONArray urls = statuses.getJSONObject(i).getJSONObject("entities").getJSONArray("urls");
+        for (int j = 0; j < urls.size(); j++) {
+          ret.add( urls.getJSONObject(j).getString("expanded_url") );
+        }
       }
     }
     return ret;
