@@ -26,19 +26,27 @@ class Posicion{
 }
 
 //Listado interno de Tweets/Posicion
-HashMap<String, Posicion> tuit = new HashMap<String, Posicion>();
+final HashMap<String, Posicion> tuit = new HashMap<String, Posicion>();
+//Parametros extra para la busqueda
+final HashMap<String, String> filtro = new HashMap<String, String>();
 //Espacio de linea
 final int X_WIN=400, Y_WIN=400, WORD_H=10;
 //Esta posicion es el tope de la pila
 Posicion inferior = new Posicion(0,Y_WIN);
 
 void setup() {
+  //Inicializamos el filtro
+  filtro.put("count",String.valueOf(15));//Numero de Tweets por busqueda
+  filtro.put("geocode","37.781157,-122.398720,1000km")//Posicion GPS y area para la busqueda
+  //Para una respuesta mas rapida  datos extras, pero no podremos acceder a las urls
+  //filtro.put("include_entities","false")
+
   //Creamos la ventana
   size(X_WIN, Y_WIN);
   twitter = new SimpleTwitterLib(CONSUMER_KEY, CONSUMER_SECRET);
   twitter.auth(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
   //Hacemos la primera busqueda para no hacer esperas luego
-  twitter.update("\"i wish\"");
+  twitter.update("\"i wish\"", filtro);
 }
 
 void draw(){ 
@@ -73,7 +81,7 @@ void mousePressed()
   ArrayList<String> twees = twitter.get_tweets();
   //Si ya estamos en el ultimo Tweet, cargamos la nueva lista
   if(twees.size() <= act_tweet){
-    twitter.update("\"i wish\"");
+    twitter.update("\"i wish\"", filtro);
     twees = twitter.get_tweets();
     act_tweet = 0;
   }

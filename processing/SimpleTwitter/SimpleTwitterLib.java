@@ -33,15 +33,15 @@ public class SimpleTwitterLib{
   private Token requestToken=null;
   private Token accessToken=null;
   private int remaining=180;
-  
+
   private String since_id=null;
   private JSONObject last_search=null;
-  
+
   public SimpleTwitterLib(final String CONSUMER_KEY, final String CONSUMER_SECRET){
-  this.service = new ServiceBuilder()
-    .provider(TwitterApi.class)
-    .apiKey(CONSUMER_KEY).apiSecret(CONSUMER_SECRET)
-    .build();
+    this.service = new ServiceBuilder()
+      .provider(TwitterApi.class)
+      .apiKey(CONSUMER_KEY).apiSecret(CONSUMER_SECRET)
+      .build();
   }
 
   public String getUrlAuth(){
@@ -56,23 +56,23 @@ public class SimpleTwitterLib{
     this.accessToken = new Token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
   }
 
-  public Response send(final String POST_URL, final HashMap<String,String> POST){
-    return this.send(POST_URL, POST, Verb.GET, this.accessToken);
+  public Response send(final String post_url, final HashMap<String,String> post){
+    return this.send(post_url, post, Verb.GET, this.accessToken);
   }
-  public Response send(final String POST_URL, final HashMap<String,String> POST, Verb method){
-    return this.send(POST_URL, POST, method, this.accessToken);
+  public Response send(final String post_url, final HashMap<String,String> post, Verb method){
+    return this.send(post_url, post, method, this.accessToken);
   }
-  public Response send(final String POST_URL, final HashMap<String,String> POST, Verb method, final String ACCESS_TOKEN, final String ACCESS_TOKEN_SECRET){
+  public Response send(final String post_url, final HashMap<String,String> post, Verb method, final String ACCESS_TOKEN, final String ACCESS_TOKEN_SECRET){
     Token token=null;
     if(ACCESS_TOKEN!=null && ACCESS_TOKEN_SECRET!=null)
       token = new Token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
-    return this.send(POST_URL, POST, method, token);
+    return this.send(post_url, post, method, token);
   }
-  public Response send(final String POST_URL, final HashMap<String,String> POST, Verb method, final Token accessToken){
-    OAuthRequest request = new OAuthRequest(method, POST_URL);
+  public Response send(final String post_url, final HashMap<String,String> post, Verb method, final Token accessToken){
+    OAuthRequest request = new OAuthRequest(method, post_url);
     for(String clave : POST.keySet()){
       if(method == Verb.POST) request.addBodyParameter(clave, POST.get(clave));
-      else request.addQuerystringParameter(clave, POST.get(clave));
+      else request.addQuerystringParameter(clave, post.get(clave));
     }
     if(accessToken!=null) this.service.signRequest(accessToken, request);
     Response response = request.send();
@@ -119,18 +119,19 @@ public class SimpleTwitterLib{
     }
     return ret;
   }
-  
+
   public ArrayList<String> get_urls(){
     ArrayList<String> ret = new ArrayList<String>();
-    if(this.last_search != null){
-      JSONArray statuses = this.last_search.getJSONArray("statuses");
+    try{
+      if(this.last_search != null){
+        JSONArray statuses = this.last_search.getJSONArray("statuses");
       for (int i = 0; i < statuses.size(); i++){
         JSONArray urls = statuses.getJSONObject(i).getJSONObject("entities").getJSONArray("urls");
         for (int j = 0; j < urls.size(); j++) {
           ret.add( urls.getJSONObject(j).getString("expanded_url") );
         }
       }
-    }
+    } catch(RuntimeException ex){;}
     return ret;
   }
 }
