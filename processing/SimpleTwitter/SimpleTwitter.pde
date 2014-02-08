@@ -9,6 +9,8 @@ final String CONSUMER_SECRET = "";
 final String ACCESS_TOKEN = "";
 final String ACCESS_TOKEN_SECRET = "";
 
+final String BUSQUEDA = "\"i wish\"";
+
 SimpleTwitterLib twitter = null;
 
 //Incremento para el eje Y
@@ -37,16 +39,19 @@ Posicion inferior = new Posicion(0,Y_WIN);
 void setup() {
   //Inicializamos el filtro
   filtro.put("count",String.valueOf(15));//Numero de Tweets por busqueda
-  filtro.put("geocode","37.781157,-122.398720,1000km")//Posicion GPS y area para la busqueda
+  filtro.put("geocode","37.781157,-122.398720,1000km");//Posicion GPS y area para la busqueda
   //Para una respuesta mas rapida  datos extras, pero no podremos acceder a las urls
-  //filtro.put("include_entities","false")
+  //filtro.put("include_entities","false");
 
   //Creamos la ventana
   size(X_WIN, Y_WIN);
   twitter = new SimpleTwitterLib(CONSUMER_KEY, CONSUMER_SECRET);
   twitter.auth(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
   //Hacemos la primera busqueda para no hacer esperas luego
-  twitter.update("\"i wish\"", filtro);
+  twitter.update(BUSQUEDA, filtro);
+  for(String uri: twitter.get_media_urls()){
+    print(uri);
+  }
 }
 
 void draw(){ 
@@ -81,7 +86,7 @@ void mousePressed()
   ArrayList<String> twees = twitter.get_tweets();
   //Si ya estamos en el ultimo Tweet, cargamos la nueva lista
   if(twees.size() <= act_tweet){
-    twitter.update("\"i wish\"", filtro);
+    twitter.update(BUSQUEDA, filtro);
     twees = twitter.get_tweets();
     act_tweet = 0;
   }

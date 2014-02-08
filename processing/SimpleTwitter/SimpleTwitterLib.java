@@ -70,8 +70,8 @@ public class SimpleTwitterLib{
   }
   public Response send(final String post_url, final HashMap<String,String> post, Verb method, final Token accessToken){
     OAuthRequest request = new OAuthRequest(method, post_url);
-    for(String clave : POST.keySet()){
-      if(method == Verb.POST) request.addBodyParameter(clave, POST.get(clave));
+    for(String clave : post.keySet()){
+      if(method == Verb.POST) request.addBodyParameter(clave, post.get(clave));
       else request.addQuerystringParameter(clave, post.get(clave));
     }
     if(accessToken!=null) this.service.signRequest(accessToken, request);
@@ -109,7 +109,7 @@ public class SimpleTwitterLib{
     post.put("q",query);
     return this.send(SimpleTwitterLib.BASE_URL+"search/tweets.json", post);
   }
-  
+
   public ArrayList<String> get_tweets(){
     ArrayList<String> ret = new ArrayList<String>();
     if(this.last_search != null){
@@ -125,10 +125,25 @@ public class SimpleTwitterLib{
     try{
       if(this.last_search != null){
         JSONArray statuses = this.last_search.getJSONArray("statuses");
+        for (int i = 0; i < statuses.size(); i++){
+          JSONArray urls = statuses.getJSONObject(i).getJSONObject("entities").getJSONArray("urls");
+          for (int j = 0; j < urls.size(); j++) {
+            ret.add( urls.getJSONObject(j).getString("expanded_url") );
+          }
+        }
+      }
+    } catch(RuntimeException ex){;}
+    return ret;
+  }
+
+  public ArrayList<String> get_media_urls(){
+    ArrayList<String> ret = new ArrayList<String>();
+    JSONArray statuses = this.last_search.getJSONArray("statuses");
+    try{
       for (int i = 0; i < statuses.size(); i++){
-        JSONArray urls = statuses.getJSONObject(i).getJSONObject("entities").getJSONArray("urls");
+        JSONArray urls = statuses.getJSONObject(i).getJSONObject("entities").getJSONArray("media");
         for (int j = 0; j < urls.size(); j++) {
-          ret.add( urls.getJSONObject(j).getString("expanded_url") );
+          ret.add( urls.getJSONObject(j).getString("media_url") );
         }
       }
     } catch(RuntimeException ex){;}
