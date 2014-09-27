@@ -2,6 +2,7 @@
   https://github.com/sirleech/Webduino/
   https://github.com/markruys/arduino-DHT
 
+  @author Victor Torre (aka ehooo) https://github.com/ehooo
   Using Webduino library
 */
 

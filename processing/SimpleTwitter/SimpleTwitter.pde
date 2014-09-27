@@ -1,5 +1,5 @@
 /**
-* @author Victor Torre (aka ehooo) 
+* @author Victor Torre (aka ehooo) https://github.com/ehooo
 * Hace falta tener instalado el plugin "oauthP5" by New York Times R&D Lab (achang), 2012 www.nytlabs.com/oauthp5
 * 
 */
