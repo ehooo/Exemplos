@@ -18,13 +18,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # Acerca de:
 Ejemplos y utiles varios.
 
+# RPi
+Ejemplos de acceso a sensores usando [Adafruit_GPIO](https://github.com/adafruit/Adafruit_Python_GPIO)
+ * [ADS1x15](rpi/ADS1x15.py) Fork de [Adafruit_ADS1x15](https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/tree/master/Adafruit_ADS1x15)
+ * [MPL3115A2](rpi/MPL3115A2.py) Basado en [MPL3115A2_Breakout](https://github.com/sparkfun/MPL3115A2_Breakout)
+ * [RainSensor](rpi/RainSensor.py) y [WindSensor](rpi/WindSensor.py) portados de [Weather_Station](https://github.com/ehooo/Weather_Station)
+
 # Processing
-Ejeplos de programas para [Processing](http://processing.org/)
+Ejemplos de programas para [Processing](http://processing.org/)
  * [SimpleTwitter](processing/SimpleTwitter):
  Es un ejemplo de uso de acceso a [Twitter](https://dev.twitter.com/apps) usando la libreria [oauthP5](http://www.nytlabs.com/oauthp5/)
 
 # Arduino
-Ejeplos de para [Arduino](http://arduino.cc/)
+Ejemplos de para [Arduino](http://arduino.cc/)
  * [Meteo](arduino/Meteo):
  Es un ejemplo de una minima estación meteorilógica.<br/>
  Hace uso de la librería [Adafruit-BMP085](https://github.com/adafruit/Adafruit-BMP085-Library) para el barometro
