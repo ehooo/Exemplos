@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title_head %} - {% trans 'Example de carpeta' %}{% endblock %}
+{% block extra_head %}{% endblock %}
+
+{% block content %}
+<div class="col-sm-8">
+	<div class="jumbotron">
+		<h1>{% trans 'Carpetas' %}</h1>
+		<p>{% trans 'Puedes crear las rutas de forma dinamica creando carpetas' %}</p>
+	</div>
+</div>
+{% endblock %}

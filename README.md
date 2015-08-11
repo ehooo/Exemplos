@@ -108,3 +108,7 @@ optional arguments:
                         Alamacena los datos en una base de datos sqlite3
   --db DBNAME           Alias de -s
 ```
+* [django_dinamic_template](python/django_dinamic_template):
+ Ejemplo para generar paginas dinamicas con Templates(https://docs.djangoproject.com/en/1.7/topics/templates/) de [Django](https://www.djangoproject.com/)
+ 
+``` python manager.py runserver ```

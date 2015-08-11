@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title_head %} - {% trans 'Ejemplo' %}{% endblock %}
+{% block extra_head %}{% endblock %}
+
+{% block content %}
+<div class="col-sm-8">
+	<div class="jumbotron">
+		<h1>{% trans 'Bienvenido' %}</h1>
+		<p>{% trans 'Esto es un ejemplo de pagina generada por Django' %}</p>
+		<p>{% trans 'Puedes crear url dinamicas usando:' %} <a href="{% url 'dinamic_url' 'dir/index' %}">'dinamic_url' 'dir/index'</a> {% trans 'para ir la fichero index.html' %}</p>
+	</div>
+</div>
+{% endblock %}
